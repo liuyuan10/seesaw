@@ -159,8 +159,6 @@ func (s *SeesawSync) Poll(id SyncSessionID, sn *SyncNotes) error {
 		// TODO(jsing): Discard pending notes?
 		sn.Notes = append(sn.Notes, SyncNote{Type: SNTDesync})
 		session.desync = false
-		session.Unlock()
-		return nil
 	}
 	session.Unlock()
 
@@ -519,11 +517,6 @@ func (sc *syncClient) handleConfigUpdate(sn *SyncNote) {
 // handleHealthcheck handles a healthcheck notification.
 func (sc *syncClient) handleHealthcheck(sn *SyncNote) {
 	log.V(1).Infoln("Sync client received healthcheck notification")
-	if sn.Healthcheck == nil {
-		log.Errorf("Healthcheck is nil: %v", sn)
-		return
-	}
-	sc.engine.hcManager.handleSyncNote(sn.Healthcheck)
 }
 
 // handleOverride handles an override notification.
